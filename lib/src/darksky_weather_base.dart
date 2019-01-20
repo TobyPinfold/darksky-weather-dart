@@ -1,5 +1,6 @@
 // Copyright (c) 2017, 'rinukkusu'. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
+
 part of darksky_weather;
 
 abstract class DarkSkyWeatherBase {
@@ -9,7 +10,7 @@ abstract class DarkSkyWeatherBase {
 
   static const String _baseUrl = 'https://api.darksky.net';
   String _getForecastUrl(
-      double lat, double lon, double time, String excludes, String lang, String units) =>
+      double lat, double lon, String time, String excludes, String lang, String units) =>
       '$_baseUrl/forecast/$_apiToken/$lat,$lon,$time' +
           '?exclude=$excludes' +
           '&lang=$lang' +
@@ -22,11 +23,13 @@ abstract class DarkSkyWeatherBase {
       {List<Exclude> excludes = const [], double time}) async {
 
     time ??= DateTime.now().millisecondsSinceEpoch.roundToDouble();
+
+    var timeFormattedForApiCall = new DateFormat("yyyy-mm-dd").format(DateTime.fromMillisecondsSinceEpoch(time));
     var rExcludes = _renderExcludes(excludes);
     var rLanguage = LanguageHelper.get(language);
     var rUnits = getUnitName(units);
 
-    var url = _getForecastUrl(lat, lon, time, rExcludes, rLanguage, rUnits);
+    var url = _getForecastUrl(lat, lon, timeFormattedForApiCall, rExcludes, rLanguage, rUnits);
     var bytes = await _getImpl(url);
 
     var decoded = utf8.decode(bytes);
