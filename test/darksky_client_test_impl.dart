@@ -6,8 +6,8 @@ class DarkSkyWeatherTest extends DarkSkyWeatherBase {
   DarkSkyWeatherTest() : super("", language: Language.English, units: Units.US);
 
   @override
-  Future<List<int>> _getImpl(String url) async {
-    var testFileBytes = await new File('data/vienna.json').readAsBytes();
+  Future<List<int>> _getImpl(String url) {
+    var testFileBytes = new File('data/vienna.json').readAsBytes();
     return testFileBytes;
   }
 }

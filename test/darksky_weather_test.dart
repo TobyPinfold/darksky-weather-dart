@@ -16,6 +16,8 @@ void main() {
     test('Data test', () {
       var forecast = darkskyApi.getForecast(.0, .0);
       expect(forecast, isNotNull);
+      var forecastTimeMachine = darkskyApi.getForecast(.0, .0, time: DateTime.now().millisecondsSinceEpoch.roundToDouble());
+      expect(forecastTimeMachine, isNotNull);
     });
   });
 }

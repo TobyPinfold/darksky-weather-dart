@@ -9,22 +9,24 @@ abstract class DarkSkyWeatherBase {
 
   static const String _baseUrl = 'https://api.darksky.net';
   String _getForecastUrl(
-          double lat, double lon, String excludes, String lang, String units) =>
-      '$_baseUrl/forecast/$_apiToken/$lat,$lon' +
-      '?exclude=$excludes' +
-      '&lang=$lang' +
-      '&units=$units';
+      double lat, double lon, double time, String excludes, String lang, String units) =>
+      '$_baseUrl/forecast/$_apiToken/$lat,$lon,$time' +
+          '?exclude=$excludes' +
+          '&lang=$lang' +
+          '&units=$units';
 
   DarkSkyWeatherBase(this._apiToken,
       {this.language = Language.English, this.units = Units.US});
 
   Future<Forecast> getForecast(double lat, double lon,
-      {List<Exclude> excludes = const []}) async {
+      {List<Exclude> excludes = const [], double time}) async {
+
+    time ??= DateTime.now().millisecondsSinceEpoch.roundToDouble();
     var rExcludes = _renderExcludes(excludes);
     var rLanguage = LanguageHelper.get(language);
     var rUnits = getUnitName(units);
 
-    var url = _getForecastUrl(lat, lon, rExcludes, rLanguage, rUnits);
+    var url = _getForecastUrl(lat, lon, time, rExcludes, rLanguage, rUnits);
     var bytes = await _getImpl(url);
 
     var decoded = utf8.decode(bytes);
