@@ -21,10 +21,10 @@ abstract class DarkSkyWeatherBase {
 
   Future<Forecast> getForecast(double lat, double lon,
       {List<Exclude> excludes = const [], double time}) async {
-
+    
     time ??= DateTime.now().millisecondsSinceEpoch.roundToDouble();
-
-    var timeFormattedForApiCall = new DateFormat("yyyy-mm-dd").format(DateTime.fromMillisecondsSinceEpoch(time));
+    var timeFormattedForApiCall = new DateFormat("yyyy-MM-dd", "en_US").format(DateTime.fromMillisecondsSinceEpoch(time.toInt()));
+    print(timeFormattedForApiCall);
     var rExcludes = _renderExcludes(excludes);
     var rLanguage = LanguageHelper.get(language);
     var rUnits = getUnitName(units);
