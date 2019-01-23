@@ -10,7 +10,7 @@ abstract class DarkSkyWeatherBase {
 
   static const String _baseUrl = 'https://api.darksky.net';
   String _getForecastUrl(
-      double lat, double lon, String time, String excludes, String lang, String units) =>
+      double lat, double lon, String excludes, String lang, String units) =>
       '$_baseUrl/forecast/$_apiToken/$lat,$lon' +
           '?exclude=$excludes' +
           '&lang=$lang' +
@@ -29,13 +29,20 @@ abstract class DarkSkyWeatherBase {
   Future<Forecast> getForecast(double lat, double lon,
       {List<Exclude> excludes = const [], double time}) async {
 
-    var timeFormattedForApiCall = (time / 1000).toInt().toString();
     var rExcludes = _renderExcludes(excludes);
     var rLanguage = LanguageHelper.get(language);
     var rUnits = getUnitName(units);
 
-    var url = time != null ? _getForecastUrl(lat, lon, timeFormattedForApiCall, rExcludes, rLanguage, rUnits) : _getForecastUrlWithTime(lat, lon, timeFormattedForApiCall, rExcludes, rLanguage, rUnits);
-    print(url);
+    var url = "";
+
+    if(time != null) {
+      var timeFormattedForApiCall = (time / 1000).toInt().toString();
+      url = _getForecastUrlWithTime(lat, lon, timeFormattedForApiCall, rExcludes, rLanguage, rUnits);
+      print(url);
+    } else {
+      url =_getForecastUrl(lat, lon, rExcludes, rLanguage, rUnits);
+      print(url);
+    }
 
     var bytes = await _getImpl(url);
 
