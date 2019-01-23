@@ -21,15 +21,16 @@ abstract class DarkSkyWeatherBase {
 
   Future<Forecast> getForecast(double lat, double lon,
       {List<Exclude> excludes = const [], double time}) async {
-    
+
     time ??= DateTime.now().millisecondsSinceEpoch.roundToDouble();
-    var timeFormattedForApiCall = new DateFormat("yyyy-MM-dd", "en_US").format(DateTime.fromMillisecondsSinceEpoch(time.toInt()));
-    print(timeFormattedForApiCall);
+    var timeFormattedForApiCall = (time / 1000).toInt().toString();
     var rExcludes = _renderExcludes(excludes);
     var rLanguage = LanguageHelper.get(language);
     var rUnits = getUnitName(units);
 
     var url = _getForecastUrl(lat, lon, timeFormattedForApiCall, rExcludes, rLanguage, rUnits);
+    print(url);
+
     var bytes = await _getImpl(url);
 
     var decoded = utf8.decode(bytes);
