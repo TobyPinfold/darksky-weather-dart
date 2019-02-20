@@ -38,10 +38,8 @@ abstract class DarkSkyWeatherBase {
     if(time != null) {
       var timeFormattedForApiCall = (time / 1000).toInt().toString();
       url = _getForecastUrlWithTime(lat, lon, timeFormattedForApiCall, rExcludes, rLanguage, rUnits);
-      print(url);
     } else {
       url =_getForecastUrl(lat, lon, rExcludes, rLanguage, rUnits);
-      print(url);
     }
 
     var bytes = await _getImpl(url);
